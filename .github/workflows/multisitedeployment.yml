@@ -34,3 +34,16 @@ jobs:
         app-name: multisitedeploymentapp1
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_APP1 }}
         package: ./app1folder
+
+    - name: Build
+      run: dotnet build ./MultiSiteDeployment.App2/MultiSiteDeployment.App2.csproj --configuration 'Release'
+      
+    - name: Publish
+      run: dotnet publish ./MultiSiteDeployment.App2/MultiSiteDeployment.App2.csproj -c Release -o ./app2folder
+      
+    - name: Deploy
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: multisitedeploymentapp2
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_APP2 }}
+        package: ./app2folder
