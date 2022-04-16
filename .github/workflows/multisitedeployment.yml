@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  App1:
+  Build_and_Deploy_App1:
 
     runs-on: ubuntu-latest
 
@@ -35,6 +35,21 @@ jobs:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_APP1 }}
         package: ./app1folder
 
+  Build_and_Deploy_App2:
+    needs: Build_and_Deploy_App1
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+    
     - name: Build
       run: dotnet build ./MultiSiteDeployment.App2/MultiSiteDeployment.App2.csproj --configuration 'Release'
       
